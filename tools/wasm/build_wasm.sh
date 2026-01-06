@@ -14,14 +14,15 @@ cd "$BUILD_DIR"
 echo "Configuring with emcmake..."
 emcmake cmake "$ROOT_DIR" \
   -DBUILD_SHARED=OFF \
-  -DENABLE_SQLITE3=ON \
-  -DENABLE_DEBUGGERS=OFF \
-  -DENABLE_FFMPEG=OFF \
-  -DENABLE_QT=OFF \
-  -DENABLE_SDL=OFF \
+  -DBUILD_LIBRETRO=ON \
+  -DBUILD_QT=OFF \
+  -DBUILD_SDL=OFF \
+  -DBUILD_PYTHON=OFF \
   -DUSE_MINIZIP=ON \
-  -DPLATFORM_LIBRETRO=ON \
-  -DTHREADING=OFF \
+  -DUSE_LIBZIP=ON \
+  -DUSE_SQLITE3=ON \
+  -DUSE_ZLIB=ON \
+  -DSKIP_LIBRARY=OFF \
   -DCMAKE_BUILD_TYPE=Release
 
 echo "Building mgba_libretro target..."
