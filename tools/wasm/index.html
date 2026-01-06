@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>mGBA WASM demo</title>
+</head>
+<body>
+  <h3>mGBA WASM Demo</h3>
+  <input id="rom" type="file" accept=".gba,.gb,.gbc" />
+  <button id="start">Start</button>
+  <script src="./mgba.js"></script>
+  <script src="./mgba_web_glue.js"></script>
+  <script>
+    (async function(){
+      const g = mgbaGlue;
+      await g.initModule();
+      g._bindSensorsToWindow();
+      document.getElementById('start').addEventListener('click', async ()=>{
+        const f = document.getElementById('rom').files[0];
+        if (!f) { alert('请选择 ROM'); return; }
+        const url = URL.createObjectURL(f);
+        await g.loadRom(url, f.name);
+        if (g.cwraps['_retro_init']) g.cwraps['_retro_init'](0);
+        // call run loop - for demo call retro_run repeatedly
+        function frame(){ if (g.cwraps['_retro_run']) g.cwraps['_retro_run'](); requestAnimationFrame(frame); }
+        requestAnimationFrame(frame);
+      });
+    })();
+  </script>
+</body>
+</html>

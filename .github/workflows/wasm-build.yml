@@ -1,0 +1,26 @@
+name: Build mGBA WASM (libretro)
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'src/**'
+      - 'tools/wasm/**'
+
+jobs:
+  build-wasm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run build inside emscripten/emsdk container
+        run: |
+          docker run --rm -v "$PWD":/work -w /work emscripten/emsdk:latest bash -lc "apt-get update && apt-get install -y python3 build-essential cmake git && /bin/bash tools/wasm/build_wasm.sh"
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mgba-wasm-artifacts
+          path: build-wasm-artifacts/
